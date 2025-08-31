@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Athlete Journal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- My Progress Screen -->
+            <div id="progress-screen" class="screen active">
+                <!-- Chart Area Wrapper -->
+                <div class="chart-area">
+                    <!-- Record a Day Button -->
+                    <button class="record-day-btn" onclick="openRecordDayModal()">Record a day</button>
+                    
+                    <!-- Show Past Ratings Button -->
+                    <button class="show-past-ratings-btn" onclick="openPastRatingsModal()">Show past ratings</button>
+                    
+                    <!-- Filter Dropdown -->
+                    <div class="filter-container">
+                        <select id="time-filter" class="filter-dropdown" onchange="updateChart()">
+                            <option value="week">Week</option>
+                            <option value="month">Month</option>
+                            <option value="year">Year</option>
+                            <option value="custom">Set date range</option>
+                        </select>
+                    </div>
+
+                    <!-- Points Summary Title -->
+                    <h2 class="chart-title">Points summary</h2>
+
+                    <!-- Chart Navigation -->
+                    <div class="chart-navigation">
+                        <button class="nav-arrow left" onclick="previousChart()">‹</button>
+                        
+                        <!-- Chart Container -->
+                        <div class="chart-container">
+                            <canvas id="mainChart"></canvas>
+                        </div>
+                        
+                        <button class="nav-arrow right" onclick="nextChart()">›</button>
+                    </div>
+
+                    <!-- Chart Indicators -->
+                    <div class="chart-indicators">
+                        <span class="indicator active" onclick="showChart(0)"></span>
+                        <span class="indicator" onclick="showChart(1)"></span>
+                        <span class="indicator" onclick="showChart(2)"></span>
+                    </div>
+
+                    <!-- Trash List (for Chart 3) -->
+                    <div id="trash-list" class="trash-list hidden">
+                        <h3>Deleted Points</h3>
+                        <div id="trash-items"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Points Screen -->
+            <div id="points-screen" class="screen">
+                <div class="points-header">
+                    <button class="create-category-btn" onclick="openCreateCategoryModal()">
+                        <span class="plus-icon">+</span>
+                        Create a category
+                    </button>
+                </div>
+                <div id="categories-container"></div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="nav-item active" onclick="showScreen('progress')">My progress</button>
+            <button class="nav-item" onclick="showScreen('points')">My points</button>
+        </div>
+    </div>
+
+    <!-- Record a Day Modal -->
+    <div id="record-day-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRecordDayModal()">&times;</span>
+            <h2>Record a day</h2>
+            <div id="grading-container"></div>
+            <button class="save-btn" onclick="saveDay()">Save</button>
+        </div>
+    </div>
+
+    <!-- Show Past Ratings Modal -->
+    <div id="past-ratings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePastRatingsModal()">&times;</span>
+            <h2>Past Ratings</h2>
+            <div id="past-ratings-list"></div>
+        </div>
+    </div>
+
+    <!-- Create Category Modal -->
+    <div id="create-category-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCreateCategoryModal()">&times;</span>
+            <h2>Create Category</h2>
+            <form id="category-form">
+                <input type="text" id="category-name" placeholder="Category name" required>
+                <div class="color-picker">
+                    <label>Choose color:</label>
+                    <div class="color-options">
+                        <input type="radio" id="color1" name="category-color" value="#AAC0AA" checked>
+                        <label for="color1" class="color-option" style="background-color: #AAC0AA"></label>
+                        
+                        <input type="radio" id="color2" name="category-color" value="#D5896F">
+                        <label for="color2" class="color-option" style="background-color: #D5896F"></label>
+                        
+                        <input type="radio" id="color3" name="category-color" value="#D7D9B1">
+                        <label for="color3" class="color-option" style="background-color: #D7D9B1"></label>
+                        
+                        <input type="radio" id="color4" name="category-color" value="#073B4C">
+                        <label for="color4" class="color-option" style="background-color: #073B4C"></label>
+                        
+                        <input type="radio" id="color5" name="category-color" value="#EF959C">
+                        <label for="color5" class="color-option" style="background-color: #EF959C"></label>
+                    </div>
+                </div>
+                <button type="submit">Create</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Point Modal -->
+    <div id="create-point-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCreatePointModal()">&times;</span>
+            <h2>Create Point</h2>
+            <form id="point-form">
+                <input type="text" id="point-name" placeholder="Point name" required>
+                <select id="point-category" required>
+                    <option value="">Select category</option>
+                </select>
+                <button type="submit">Create</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Point Modal -->
+    <div id="edit-point-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditPointModal()">&times;</span>
+            <h2>Edit Point</h2>
+            <form id="edit-point-form">
+                <input type="text" id="edit-point-name" placeholder="Point name" required>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Date Range Modal -->
+    <div id="date-range-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeDateRangeModal()">&times;</span>
+            <h2>Set Date Range</h2>
+            <form id="date-range-form">
+                <input type="date" id="start-date" required>
+                <input type="date" id="end-date" required>
+                <button type="submit">Apply</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Category Modal -->
+    <div id="edit-category-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditCategoryModal()">&times;</span>
+            <h2>Edit Category</h2>
+            <form id="edit-category-form">
+                <input type="text" id="edit-category-name" placeholder="Category name" required>
+                <div class="color-picker">
+                    <label>Choose color:</label>
+                    <div class="color-options">
+                        <input type="radio" id="edit-color1" name="edit-category-color" value="#AAC0AA">
+                        <label for="edit-color1" class="color-option" style="background-color: #AAC0AA"></label>
+                        
+                        <input type="radio" id="edit-color2" name="edit-category-color" value="#D5896F">
+                        <label for="edit-color2" class="color-option" style="background-color: #D5896F"></label>
+                        
+                        <input type="radio" id="edit-color3" name="edit-category-color" value="#D7D9B1">
+                        <label for="edit-color3" class="color-option" style="background-color: #D7D9B1"></label>
+                        
+                        <input type="radio" id="edit-color4" name="edit-category-color" value="#073B4C">
+                        <label for="edit-color4" class="color-option" style="background-color: #073B4C"></label>
+                        
+                        <input type="radio" id="edit-color5" name="edit-category-color" value="#EF959C">
+                        <label for="edit-color5" class="color-option" style="background-color: #EF959C"></label>
+                    </div>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
