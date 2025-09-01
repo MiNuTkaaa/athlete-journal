@@ -36,16 +36,18 @@ body.modal-open {
     position: relative;
 }
 
-/* Chart Area Wrapper */
-.chart-area {
-    position: relative;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-}
+    /* Chart Area Wrapper */
+    .chart-area {
+        position: relative;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        min-height: 100vh;
+        justify-content: space-between;
+    }
 
 /* Top Buttons */
 .record-day-btn {
@@ -196,7 +198,9 @@ body.modal-open {
     justify-content: center;
     gap: 10px;
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 5;
 }
 
 .indicator {
@@ -753,7 +757,7 @@ button[type="submit"]:hover, .save-btn:hover {
     /* General mobile adjustments */
     .main-content {
         padding: 10px;
-        padding-bottom: 100px; /* Account for bottom nav */
+        padding-bottom: 120px; /* Increased padding to ensure content is above bottom nav */
     }
     
     /* Chart container mobile fixes */
@@ -765,8 +769,10 @@ button[type="submit"]:hover, .save-btn:hover {
         max-height: 400px; /* Maximum height for very large screens */
         padding: 15px;
         margin: 0;
+        margin-bottom: 120px; /* Space for fixed indicators above menu */
         border-radius: 15px;
-        overflow: hidden; /* Prevent horizontal scroll */
+        overflow: visible; /* Allow indicators to be visible */
+        flex-shrink: 0; /* Prevent shrinking */
     }
     
     .chart-container canvas {
@@ -779,21 +785,37 @@ button[type="submit"]:hover, .save-btn:hover {
     .chart-area {
         padding: 0;
         width: 100%;
+        position: relative; /* For absolute positioning of indicators */
+    }
+    
+    /* Chart indicators mobile positioning */
+    .chart-indicators {
+        position: fixed;
+        bottom: 90px; /* Fixed position above bottom menu */
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        z-index: 10;
+        flex-shrink: 0; /* Prevent shrinking */
     }
     
     /* Filter container mobile adjustments */
     .filter-container {
         width: 100%;
         padding: 0;
-        margin-top: 10px; /* Reduced space between buttons and filter */
-        margin-bottom: 15px;
+        margin-top: 10px; /* Space between buttons and filter */
+        margin-bottom: 20px; /* Consistent spacing with chart */
+        z-index: 5;
+        flex-shrink: 0; /* Prevent shrinking */
     }
     
     .filter-dropdown {
         width: 100%;
         max-width: 200px;
         font-size: 16px; /* Better for mobile touch */
-        padding: 12px 15px;
+        padding: 8px 15px; /* Reduced padding to match button height */
+        height: 44px; /* Match the height of record a day button */
+        box-sizing: border-box;
     }
     
     /* Chart title mobile */
@@ -819,9 +841,11 @@ button[type="submit"]:hover, .save-btn:hover {
         display: flex !important; /* Force display on mobile */
         flex-direction: column;
         gap: 8px;
-        margin-bottom: 10px; /* Reduced space between buttons and filter */
+        margin-top: 20px; /* Add top margin to move buttons down */
+        margin-bottom: 0; /* No bottom margin */
         padding: 0; /* Remove padding to align with filter */
         width: 100%;
+        flex-shrink: 0; /* Prevent shrinking */
     }
     
     /* Mobile button layout - stack vertically */
