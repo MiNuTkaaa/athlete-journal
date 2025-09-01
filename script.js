@@ -46,6 +46,9 @@ function initializeApp() {
             chartInstance.resize();
         }
     });
+    
+    // Add swipe functionality to chart container
+    setupSwipeNavigation();
 }
 
 function setupFormEventListeners() {
@@ -1064,3 +1067,89 @@ function initializeSampleData() {
 
 // Uncomment the next line to initialize with sample data for testing
 // initializeSampleData();
+
+// Swipe Navigation Functions
+function setupSwipeNavigation() {
+    const chartContainer = document.querySelector('.chart-container');
+    let startX = 0;
+    let startY = 0;
+    let endX = 0;
+    let endY = 0;
+    let isSwiping = false;
+
+    // Touch events for mobile
+    chartContainer.addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        isSwiping = true;
+    });
+
+    chartContainer.addEventListener('touchmove', function(e) {
+        if (!isSwiping) return;
+        
+        endX = e.touches[0].clientX;
+        endY = e.touches[0].clientY;
+        
+        // Prevent default to avoid scrolling while swiping
+        e.preventDefault();
+    });
+
+    chartContainer.addEventListener('touchend', function(e) {
+        if (!isSwiping) return;
+        
+        const deltaX = startX - endX;
+        const deltaY = startY - endY;
+        
+        // Check if it's a horizontal swipe (more horizontal than vertical)
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+            if (deltaX > 0) {
+                // Swipe left - next chart
+                nextChart();
+            } else {
+                // Swipe right - previous chart
+                previousChart();
+            }
+        }
+        
+        isSwiping = false;
+    });
+
+    // Mouse events for desktop (optional)
+    chartContainer.addEventListener('mousedown', function(e) {
+        startX = e.clientX;
+        startY = e.clientY;
+        isSwiping = true;
+    });
+
+    chartContainer.addEventListener('mousemove', function(e) {
+        if (!isSwiping) return;
+        
+        endX = e.clientX;
+        endY = e.clientY;
+    });
+
+    chartContainer.addEventListener('mouseup', function(e) {
+        if (!isSwiping) return;
+        
+        const deltaX = startX - endX;
+        const deltaY = startY - endY;
+        
+        // Check if it's a horizontal swipe (more horizontal than vertical)
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+            if (deltaX > 0) {
+                // Swipe left - next chart
+                nextChart();
+            } else {
+                // Swipe right - previous chart
+                previousChart();
+            }
+        }
+        
+        isSwiping = false;
+    });
+
+    // Prevent text selection during swipe
+    chartContainer.addEventListener('selectstart', function(e) {
+        e.preventDefault();
+    });
+}
