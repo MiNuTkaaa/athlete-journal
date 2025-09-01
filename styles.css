@@ -760,8 +760,10 @@ button[type="submit"]:hover, .save-btn:hover {
     .chart-container {
         width: 100%;
         max-width: none;
-        height: 250px; /* Reduced height for mobile */
-        padding: 10px;
+        height: 40vh; /* Use viewport height for better adaptation */
+        min-height: 250px; /* Minimum height for very small screens */
+        max-height: 400px; /* Maximum height for very large screens */
+        padding: 15px;
         margin: 0;
         border-radius: 15px;
         overflow: hidden; /* Prevent horizontal scroll */
@@ -1028,8 +1030,10 @@ button[type="submit"]:hover, .save-btn:hover {
 /* Extra small mobile devices */
 @media (max-width: 480px) {
     .chart-container {
-        height: 200px;
-        padding: 8px;
+        height: 35vh; /* Use viewport height for small screens */
+        min-height: 200px; /* Minimum height for very small screens */
+        max-height: 300px; /* Maximum height for small screens */
+        padding: 10px;
     }
     
     .chart-title {
@@ -1071,7 +1075,9 @@ button[type="submit"]:hover, .save-btn:hover {
 /* Landscape mobile adjustments */
 @media (max-width: 768px) and (orientation: landscape) {
     .chart-container {
-        height: 180px;
+        height: 30vh; /* Use viewport height for landscape mode */
+        min-height: 180px; /* Minimum height for landscape */
+        max-height: 250px; /* Maximum height for landscape */
     }
     
     .modal-content {
