@@ -148,6 +148,7 @@ body.modal-open {
     font-weight: 500;
     margin-bottom: 40px;
     color: var(--font-color);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 
@@ -163,6 +164,7 @@ body.modal-open {
     overflow: hidden;
     touch-action: pan-y pinch-zoom;
     user-select: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* Chart Indicators */
@@ -183,10 +185,12 @@ body.modal-open {
     background-color: var(--button-color);
     cursor: pointer;
     transition: all 0.3s ease;
+    transform: scale(1);
 }
 
 .indicator.active {
     background-color: var(--accent);
+    transform: scale(1.2);
 }
 
 .indicator:hover {
@@ -195,12 +199,12 @@ body.modal-open {
 
 /* Trash List */
 .trash-list {
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 140px;
     background-color: var(--chart-background);
     border-radius: 20px;
     padding: 30px;
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     max-height: 400px;
     overflow-y: auto;
@@ -971,9 +975,11 @@ button[type="submit"]:hover, .save-btn:hover {
     
     /* Trash list mobile */
     .trash-list {
-        margin-bottom: 100px;
+        margin-top: 5px;
+        margin-bottom: 120px;
         padding: 20px;
         border-radius: 15px;
+        width: 100%;
     }
     
     .trash-item {

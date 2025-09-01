@@ -156,7 +156,7 @@ function showChart(chartIndex) {
         indicator.classList.toggle('active', index === chartIndex);
     });
 
-    // Update chart title
+    // Update chart title with animation
     updateChartTitle();
 
     // Hide/show trash list based on chart
@@ -168,13 +168,40 @@ function showChart(chartIndex) {
         trashList.classList.add('hidden');
     }
 
-    updateChart();
+    // Animate chart transition
+    animateChartTransition();
+}
+
+function animateChartTransition() {
+    const chartContainer = document.querySelector('.chart-container');
+    
+    // Add fade out animation
+    chartContainer.style.opacity = '0';
+    chartContainer.style.transform = 'scale(0.95)';
+    
+    // Wait for fade out, then update chart and fade in
+    setTimeout(() => {
+        updateChart();
+        
+        // Add fade in animation
+        chartContainer.style.opacity = '1';
+        chartContainer.style.transform = 'scale(1)';
+    }, 150);
 }
 
 function updateChartTitle() {
     const titleElement = document.querySelector('.chart-title');
     const titles = ['Points summary', 'Category averages', 'Deleted points'];
-    titleElement.textContent = titles[currentChart];
+    
+    // Animate title change
+    titleElement.style.opacity = '0';
+    titleElement.style.transform = 'translateY(-10px)';
+    
+    setTimeout(() => {
+        titleElement.textContent = titles[currentChart];
+        titleElement.style.opacity = '1';
+        titleElement.style.transform = 'translateY(0)';
+    }, 150);
 }
 
 function nextChart() {
@@ -463,7 +490,18 @@ function createTrashChart(ctx, chartData) {
             },
             scales: {
                 y: {
-                    display: false
+                    beginAtZero: true,
+                    max: 10,
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#DCEED1',
+                        font: {
+                            family: 'Lato',
+                            size: window.innerWidth <= 768 ? 10 : 12
+                        }
+                    }
                 },
                 x: {
                     grid: {
@@ -472,9 +510,10 @@ function createTrashChart(ctx, chartData) {
                     ticks: {
                         color: '#DCEED1',
                         font: {
-                            family: 'Lato'
+                            family: 'Lato',
+                            size: window.innerWidth <= 768 ? 10 : 12
                         },
-                        maxRotation: 45
+                        maxRotation: window.innerWidth <= 768 ? 90 : 45
                     }
                 }
             }
