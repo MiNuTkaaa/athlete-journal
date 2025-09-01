@@ -39,6 +39,13 @@ function initializeApp() {
     
     // Set up form event listeners
     setupFormEventListeners();
+    
+    // Add window resize listener for responsive charts
+    window.addEventListener('resize', function() {
+        if (chartInstance) {
+            chartInstance.resize();
+        }
+    });
 }
 
 function setupFormEventListeners() {
@@ -370,7 +377,8 @@ function createBarChart(ctx, chartData) {
                     ticks: {
                         color: '#DCEED1',
                         font: {
-                            family: 'Lato'
+                            family: 'Lato',
+                            size: window.innerWidth <= 768 ? 10 : 12
                         }
                     }
                 },
@@ -381,9 +389,10 @@ function createBarChart(ctx, chartData) {
                     ticks: {
                         color: '#DCEED1',
                         font: {
-                            family: 'Lato'
+                            family: 'Lato',
+                            size: window.innerWidth <= 768 ? 10 : 12
                         },
-                        maxRotation: 45
+                        maxRotation: window.innerWidth <= 768 ? 90 : 45
                     }
                 }
             },
@@ -413,14 +422,14 @@ function createPieChart(ctx, chartData) {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    position: 'right',
+                    position: window.innerWidth <= 768 ? 'bottom' : 'right',
                     labels: {
                         color: '#DCEED1',
                         font: {
                             family: 'Lato',
-                            size: 14
+                            size: window.innerWidth <= 768 ? 12 : 14
                         },
-                        padding: 20
+                        padding: window.innerWidth <= 768 ? 10 : 20
                     }
                 }
             }
@@ -483,29 +492,35 @@ function openRecordDayModal() {
     const modal = document.getElementById('record-day-modal');
     loadGradingInterface();
     modal.style.display = 'block';
+    document.body.classList.add('modal-open');
 }
 
 function closeRecordDayModal() {
     document.getElementById('record-day-modal').style.display = 'none';
+    document.body.classList.remove('modal-open');
 }
 
 function openPastRatingsModal() {
     const modal = document.getElementById('past-ratings-modal');
     loadPastRatings();
     modal.style.display = 'block';
+    document.body.classList.add('modal-open');
 }
 
 function closePastRatingsModal() {
     document.getElementById('past-ratings-modal').style.display = 'none';
+    document.body.classList.remove('modal-open');
 }
 
 function openCreateCategoryModal() {
     document.getElementById('create-category-modal').style.display = 'block';
+    document.body.classList.add('modal-open');
 }
 
 function closeCreateCategoryModal() {
     document.getElementById('create-category-modal').style.display = 'none';
     document.getElementById('category-form').reset();
+    document.body.classList.remove('modal-open');
 }
 
 function openCreatePointModal(categoryId) {
@@ -526,11 +541,13 @@ function openCreatePointModal(categoryId) {
     });
     
     modal.style.display = 'block';
+    document.body.classList.add('modal-open');
 }
 
 function closeCreatePointModal() {
     document.getElementById('create-point-modal').style.display = 'none';
     document.getElementById('point-form').reset();
+    document.body.classList.remove('modal-open');
 }
 
 function openEditPointModal(pointId) {
@@ -540,6 +557,7 @@ function openEditPointModal(pointId) {
         editingPointId = pointId;
         document.getElementById('edit-point-name').value = point.name;
         document.getElementById('edit-point-modal').style.display = 'block';
+        document.body.classList.add('modal-open');
     }
 }
 
@@ -547,10 +565,12 @@ function closeEditPointModal() {
     document.getElementById('edit-point-modal').style.display = 'none';
     document.getElementById('edit-point-form').reset();
     editingPointId = null;
+    document.body.classList.remove('modal-open');
 }
 
 function openDateRangeModal() {
     document.getElementById('date-range-modal').style.display = 'block';
+    document.body.classList.add('modal-open');
 }
 
 function closeDateRangeModal() {
@@ -558,6 +578,7 @@ function closeDateRangeModal() {
     document.getElementById('date-range-form').reset();
     // Reset filter to week if user cancels
     document.getElementById('time-filter').value = 'week';
+    document.body.classList.remove('modal-open');
 }
 
 function openEditCategoryModal(categoryId) {
@@ -574,6 +595,7 @@ function openEditCategoryModal(categoryId) {
         }
         
         document.getElementById('edit-category-modal').style.display = 'block';
+        document.body.classList.add('modal-open');
     }
 }
 
@@ -581,6 +603,7 @@ function closeEditCategoryModal() {
     document.getElementById('edit-category-modal').style.display = 'none';
     document.getElementById('edit-category-form').reset();
     editingCategoryId = null;
+    document.body.classList.remove('modal-open');
 }
 
 // Category Management

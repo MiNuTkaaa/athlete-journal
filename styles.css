@@ -22,6 +22,13 @@ body {
     overflow: hidden;
 }
 
+/* Prevent body scroll when modal is open on mobile */
+body.modal-open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+}
+
 .app-container {
     height: 100vh;
     display: flex;
@@ -178,9 +185,9 @@ body {
     padding: 40px;
     width: 90%;
     max-width: 1200px;
-    min-width: 700px;
     height: 400px;
     position: relative;
+    overflow-x: auto;
 }
 
 /* Chart Indicators */
@@ -743,32 +750,344 @@ button[type="submit"]:hover, .save-btn:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    /* General mobile adjustments */
+    .main-content {
+        padding: 10px;
+        padding-bottom: 100px; /* Account for bottom nav */
+    }
+    
+    /* Chart container mobile fixes */
     .chart-container {
         width: 100%;
-        max-width: 500px;
-        height: 300px;
-        padding: 20px;
+        max-width: none;
+        height: 250px; /* Reduced height for mobile */
+        padding: 10px;
+        margin: 0;
+        border-radius: 15px;
+        overflow: hidden; /* Prevent horizontal scroll */
     }
     
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-        padding: 30px;
+    .chart-container canvas {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        width: auto !important;
+        height: auto !important;
     }
     
-    .record-day-btn, .show-past-ratings-btn {
-        padding: 12px 20px;
-        font-size: 14px;
+    .chart-area {
+        padding: 0;
+        width: 100%;
+    }
+    
+    /* Filter container mobile adjustments */
+    .filter-container {
+        width: 100%;
+        padding: 0;
+        margin-top: 10px; /* Reduced space between buttons and filter */
+        margin-bottom: 15px;
+    }
+    
+    .filter-dropdown {
+        width: 100%;
+        max-width: 200px;
+        font-size: 16px; /* Better for mobile touch */
+        padding: 12px 15px;
+    }
+    
+    /* Chart title mobile */
+    .chart-title {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    /* Chart navigation mobile */
+    .chart-navigation {
+        gap: 8px;
+        margin-bottom: 15px;
     }
     
     .nav-arrow {
-        font-size: 36px;
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    /* Show mobile button container on mobile */
+    .mobile-button-container {
+        display: flex !important; /* Force display on mobile */
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px; /* Reduced space between buttons and filter */
+        padding: 0; /* Remove padding to align with filter */
+        width: 100%;
+    }
+    
+    /* Mobile button layout - stack vertically */
+    .mobile-button-container .record-day-btn, 
+    .mobile-button-container .show-past-ratings-btn {
+        position: static;
+        width: 200px; /* Match filter dropdown width */
+        margin: 5px 0;
+        padding: 12px 15px;
+        font-size: 14px;
+        border-radius: 20px;
+        max-width: 200px; /* Match filter dropdown max-width */
+        display: block; /* Ensure buttons are visible */
+    }
+    
+    /* Hide the absolute positioned buttons on mobile */
+    .record-day-btn, .show-past-ratings-btn {
+        display: none;
+    }
+    
+    /* Modal improvements for mobile */
+    .modal-content {
+        width: 95%;
+        margin: 2% auto;
+        padding: 20px;
+        max-height: 95vh;
+        overflow-y: auto;
+        border-radius: 15px;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+    
+    /* Ensure modal content is scrollable */
+    #record-day-modal .modal-content {
+        display: flex;
+        flex-direction: column;
+        max-height: 95vh;
+    }
+    
+    #grading-container {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .modal h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .close {
+        font-size: 24px;
+        right: 15px;
+        top: 15px;
+    }
+    
+    /* Grading system mobile improvements */
+    .grading-category {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .grading-category h3 {
+        font-size: 16px;
+        margin-bottom: 15px;
+        gap: 10px;
+    }
+    
+    .grading-point {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 8px 0;
+    }
+    
+    .point-label {
+        font-size: 14px;
+        width: 100%;
+    }
+    
+    .rating-scale {
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    
+    .rating-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+        border-radius: 8px;
+        min-width: 36px; /* Prevent shrinking */
+    }
+    
+    /* Improve touch targets */
+    .rating-btn:active {
+        transform: scale(0.95);
+    }
+    
+    /* Points screen mobile */
+    .points-header {
+        margin-bottom: 20px;
+    }
+    
+    .create-category-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 15px;
+        font-size: 14px;
+    }
+    
+    .category-header {
+        padding: 15px;
+    }
+    
+    .category-name {
+        font-size: 16px;
+    }
+    
+    .category-points {
+        padding: 10px 15px 15px;
+    }
+    
+    .point-item {
+        padding: 8px 0;
+    }
+    
+    .point-name {
+        font-size: 14px;
+    }
+    
+    /* Bottom navigation mobile */
+    .bottom-nav {
+        height: 70px;
+    }
+    
+    .nav-item {
+        font-size: 16px;
+    }
+    
+    /* Form improvements for mobile */
+    input[type="text"], input[type="date"], select {
+        padding: 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    button[type="submit"], .save-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+    
+    /* Color picker mobile */
+    .color-options {
+        gap: 10px;
+    }
+    
+    .color-option {
+        width: 35px;
+        height: 35px;
+    }
+    
+    /* Trash list mobile */
+    .trash-list {
+        margin-bottom: 100px;
+        padding: 20px;
+        border-radius: 15px;
+    }
+    
+    .trash-item {
+        padding: 12px 15px;
+        margin-bottom: 8px;
+    }
+    
+    .delete-forever-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    /* Past ratings mobile */
+    .past-rating-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px 0;
+    }
+    
+    .rating-info {
+        width: 100%;
+    }
+    
+    .rating-date {
+        font-size: 16px;
+    }
+    
+    .rating-summary {
+        margin: 0;
+        width: 100%;
+    }
+    
+    .delete-rating-btn {
+        align-self: flex-end;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+    .chart-container {
+        height: 200px;
+        padding: 8px;
+    }
+    
+    .chart-title {
+        font-size: 16px;
+    }
+    
+    .nav-arrow {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+    
+    .modal-content {
+        width: 98%;
+        margin: 1% auto;
+        padding: 15px;
+    }
+    
+    .grading-point {
+        gap: 8px;
+    }
+    
+    .rating-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+        min-width: 32px;
+    }
+    
+    .category-header {
+        padding: 12px;
+    }
+    
+    .category-points {
+        padding: 8px 12px 12px;
+    }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+    .chart-container {
+        height: 180px;
+    }
+    
+    .modal-content {
+        margin: 1% auto;
+        max-height: 98vh;
+    }
+    
+    #grading-container {
+        max-height: 40vh;
     }
 }
 
 /* Chart.js Custom Styles */
 .chart-container canvas {
     max-height: 100% !important;
+    max-width: 100% !important;
 }
 
 /* Date Range Form */
